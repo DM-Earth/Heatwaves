@@ -1,0 +1,41 @@
+{
+	"schema_version": 1,
+	"minecraft": {
+		"environment": "*"
+	},
+	"quilt_loader": {
+		"group": "com.dm.earth",
+		"id": "modid",
+		"version": "${version}",
+		"metadata": {
+			"name": "Mod Name",
+			"description": "A short description of your mod.",
+			"contributors": {
+				"DM Earth": "Owner"
+			},
+			"contact": {
+				"sources": "https://github.com/DM-Earth/Modid"
+			},
+			"icon": "assets/modid/icon.png",
+			"license": "GPL-3.0-or-later"
+		},
+		"provides": {},
+		"intermediate_mappings": "net.fabricmc:intermediary",
+		"entrypoints": {},
+		"depends": [
+			{
+				"id": "quilt_loader",
+				"versions": ">=0.18.0-"
+			},
+			{
+				"id": "quilted_fabric_api",
+				"versions": ">=5.0.0-"
+			},
+			{
+				"id": "minecraft",
+				"versions": ">=1.19.3"
+			}
+		]
+	},
+	"mixin": "modid.mixins.json"
+}
