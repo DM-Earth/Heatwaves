@@ -5,23 +5,25 @@
 	},
 	"quilt_loader": {
 		"group": "com.dm.earth",
-		"id": "modid",
+		"id": "heatwaves",
 		"version": "${version}",
 		"metadata": {
-			"name": "Mod Name",
+			"name": "Heatwaves",
 			"description": "A short description of your mod.",
 			"contributors": {
 				"DM Earth": "Owner"
 			},
 			"contact": {
-				"sources": "https://github.com/DM-Earth/Modid"
+				"sources": "https://github.com/DM-Earth/Heatwaves"
 			},
-			"icon": "assets/modid/icon.png",
+			"icon": "assets/heatwaves/icon.png",
 			"license": "GPL-3.0-or-later"
 		},
 		"provides": {},
 		"intermediate_mappings": "net.fabricmc:intermediary",
-		"entrypoints": {},
+		"entrypoints": {
+			"init": ["com.dm.earth.heatwaves.Heatwaves"]
+		},
 		"depends": [
 			{
 				"id": "quilt_loader",
@@ -37,5 +39,5 @@
 			}
 		]
 	},
-	"mixin": "modid.mixins.json"
+	"mixin": "heatwaves.mixins.json"
 }
