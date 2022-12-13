@@ -1,5 +1,7 @@
 package com.dm.earth.heatwaves.api;
 
+import java.util.ArrayList;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -10,13 +12,26 @@ public interface TemperatureFactor {
 	 *
 	 * @param world The world.
 	 * @param pos   The position.
+	 * @param environment The environment temperature.
 	 * @return The temperature increase.
 	 */
-	Info increase(World world, BlockPos pos);
+	Info increase(World world, BlockPos pos, int environment);
 
-	public static record Info(int increase, boolean override) {
-		public static Info of(int increase) {
-			return new Info(increase, false);
-		}
+	public static record Info(int increase, boolean override, boolean special) {
+	}
+
+	static final ArrayList<TemperatureFactor> FACTORS = new ArrayList<>();
+
+	/**
+	 * Register a temperature factor.
+	 *
+	 * @param <T>    The type of the factor.
+	 * @param factor The factor.
+	 * @return The registered factor.
+	 */
+	static <T extends TemperatureFactor> T register(T factor) {
+		if (!FACTORS.contains(factor))
+			FACTORS.add(factor);
+		return factor;
 	}
 }

@@ -19,10 +19,10 @@
 			"icon": "assets/heatwaves/icon.png",
 			"license": "GPL-3.0-or-later"
 		},
-		"provides": {},
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"entrypoints": {
-			"init": ["com.dm.earth.heatwaves.Heatwaves"]
+			"init": ["com.dm.earth.heatwaves.Heatwaves"],
+			"events": ["com.dm.earth.heatwaves.Heatwaves"]
 		},
 		"depends": [
 			{
