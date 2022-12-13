@@ -5,8 +5,10 @@ import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
 import org.quiltmc.qsl.command.api.CommandRegistrationCallback;
 
 import com.dm.earth.heatwaves.api.BlockTemperature;
+import com.dm.earth.heatwaves.api.BlockTemperatureKeeper;
 import com.dm.earth.heatwaves.api.BlockTemperatureSource;
 import com.dm.earth.heatwaves.api.TemperatureFactor;
+import com.dm.earth.heatwaves.impl.BiomeTemperatureFactor;
 import com.dm.earth.heatwaves.impl.BlockTemperatureFactor;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -21,10 +23,12 @@ import net.minecraft.server.command.ServerCommandSource;
 
 public class Heatwaves implements ModInitializer, CommandRegistrationCallback {
 	@Override
+	@SuppressWarnings("UnstableApiUsage")
 	public void onInitialize(ModContainer mod) {
 		TemperatureFactor.register(new BlockTemperatureFactor());
+		TemperatureFactor.register(new BiomeTemperatureFactor());
 		BlockTemperatureSource.register(BlockTemperatureSource.simple(FluidConstants.LAVA_TEMPERATURE, Blocks.LAVA));
-		BlockTemperatureSource.register(BlockTemperatureSource.simple(FluidConstants.WATER_TEMPERATURE, Blocks.WATER));
+		BlockTemperatureKeeper.register(BlockTemperatureKeeper.simple(FluidConstants.WATER_TEMPERATURE, Blocks.WATER));
 	}
 
 	@Override

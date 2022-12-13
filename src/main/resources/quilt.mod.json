@@ -39,5 +39,6 @@
 			}
 		]
 	},
-	"mixin": "heatwaves.mixins.json"
+	"mixin": "heatwaves.mixins.json",
+	"access_widener": "heatwaves.accesswidener"
 }

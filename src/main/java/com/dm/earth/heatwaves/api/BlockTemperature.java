@@ -41,6 +41,6 @@ public class BlockTemperature {
 				}
 		}
 		// 0 is the lowest temperature
-		return ret < 0 ? 0 : ret;
+		return Math.max(ret, 0);
 	}
 }

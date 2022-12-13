@@ -44,7 +44,7 @@ public class BlockTemperatureFactor implements TemperatureFactor {
 			}
 
 			int finalTemp = BlockTemperatureSource.getSource(world, tp).get() - env;
-			int decrep = (int) Math.pow(finalTemp, 3.3d / MAX_DISTANCE);
+			int decrep = (int) Math.pow(finalTemp, 3.5d / MAX_DISTANCE);
 			for (BlockPos passing : passed) {
 				finalTemp -= decrep;
 				finalTemp = BlockTemperatureKeeper.process(world, passing, finalTemp);

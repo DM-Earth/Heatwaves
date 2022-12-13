@@ -55,3 +55,7 @@ publishing {
 	repositories {
 	}
 }
+
+loom {
+	accessWidenerPath = file("src/main/resources/heatwaves.accesswidener")
+}

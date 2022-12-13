@@ -12,11 +12,11 @@ public interface BlockTemperatureKeeper {
 	/**
 	 * Container for {@code BlockTemperatureKeeper}.
 	 */
-	public static interface Container {
+	interface Container {
 		/**
 		 * A simple implementation of {@code Container}.
 		 */
-		public static class Simple implements Container {
+		class Simple implements Container {
 			/**
 			 * Creates a new {@code Simple} instance.
 			 *
@@ -72,9 +72,13 @@ public interface BlockTemperatureKeeper {
 	 * @param blocks The blocks.
 	 * @return The keeper.
 	 */
-	static <T extends Container> T register(T keeper, Block... blocks) {
+	static <T extends Container> T register(T keeper) {
 		KEEPERS.add(keeper);
 		return keeper;
+	}
+
+	static Container.Simple simple(int kept, Block... blocks) {
+		return Container.Simple.of((world, pos, temp) -> Math.min(Math.abs(temp), kept), blocks);
 	}
 
 	/**
