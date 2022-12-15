@@ -29,7 +29,7 @@ public class Heatwaves implements ModInitializer, CommandRegistrationCallback {
 		TemperatureFactor.register(new BlockTemperatureFactor());
 		TemperatureFactor.register(new BiomeTemperatureFactor());
 		BlockTemperatureSource.register(BlockTemperatureSource.simple(FluidConstants.LAVA_TEMPERATURE, Blocks.LAVA));
-		BlockTemperatureKeeper.register(BlockTemperatureKeeper.simple(FluidConstants.WATER_TEMPERATURE, Blocks.WATER));
+		BlockTemperatureKeeper.register(BlockTemperatureKeeper.simple(80, Blocks.WATER));
 	}
 
 	@Override

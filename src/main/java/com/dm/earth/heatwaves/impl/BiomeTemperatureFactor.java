@@ -10,9 +10,12 @@ import net.minecraft.world.World;
 public class BiomeTemperatureFactor implements TemperatureFactor {
 
 	@Override
-	@SuppressWarnings({"deprecation", "UnstableApiUsage"})
+	@SuppressWarnings({ "deprecation", "UnstableApiUsage" })
 	public Info increase(World world, BlockPos pos, int environment) {
-		return new Info((int) ((world.getBiome(pos).value().getTemperature(pos) * 35d) + FluidConstants.WATER_TEMPERATURE), false, false);
+		return new Info(
+				(int) (((world.getBiome(pos).value().getTemperature(pos) * 35d) - 3.5d)
+						+ FluidConstants.WATER_TEMPERATURE),
+				false, false);
 	}
 
 }
