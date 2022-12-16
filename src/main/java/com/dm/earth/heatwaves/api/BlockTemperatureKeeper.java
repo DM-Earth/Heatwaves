@@ -3,7 +3,12 @@ package com.dm.earth.heatwaves.api;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dm.earth.heatwaves.Heatwaves;
+
 import net.minecraft.block.Block;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldAccess;
 
@@ -84,8 +89,8 @@ public interface BlockTemperatureKeeper {
 	/**
 	 * Process a temperature addition.
 	 *
-	 * @param world       The world.
-	 * @param pos         The position.
+	 * @param world    The world.
+	 * @param pos      The position.
 	 * @param addition The input temperature addition.
 	 * @return The processed temperature addition.
 	 */
@@ -94,8 +99,13 @@ public interface BlockTemperatureKeeper {
 			return 0;
 		ArrayList<Integer> keepers = new ArrayList<>();
 		for (Container container : KEEPERS) {
-			if (container.isValid(world, pos))
+			if (container.isValid(world, pos)) {
 				keepers.add(container.getKeeper().keep(world, pos, addition));
+				Heatwaves.debug(() -> "Detected keeper at " + pos.toString() + ": "
+						+ Registries.BLOCK.getId(world.getBlockState(pos).getBlock()).toString());
+			} else
+				Heatwaves.debug(() -> "Not a keeper at " + pos.toString() + ": "
+						+ Registries.BLOCK.getId(world.getBlockState(pos).getBlock()).toString());
 		}
 		int ret = addition + ((addition > 0 ? -1 : 1)
 				* (keepers.isEmpty() ? 0 : keepers.stream().mapToInt(Integer::intValue).sum() / keepers.size()));

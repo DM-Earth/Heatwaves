@@ -13,7 +13,7 @@ public class BiomeTemperatureFactor implements TemperatureFactor {
 	@SuppressWarnings({ "deprecation", "UnstableApiUsage" })
 	public Info increase(World world, BlockPos pos, int environment) {
 		return new Info(
-				(int) (((world.getBiome(pos).value().getTemperature(pos) * 35d) - 3.5d)
+				(int) (((world.getBiome(pos).value().getTemperature(pos) * 25F) - 2.5F)
 						+ FluidConstants.WATER_TEMPERATURE),
 				false, false);
 	}
