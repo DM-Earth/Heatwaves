@@ -12,6 +12,7 @@ import com.dm.earth.heatwaves.api.BlockTemperature;
 import com.dm.earth.heatwaves.api.BlockTemperatureKeeper;
 import com.dm.earth.heatwaves.api.BlockTemperatureSource;
 import com.dm.earth.heatwaves.api.TemperatureFactor;
+import com.dm.earth.heatwaves.impl.BasicBlockTemperatureKeeper;
 import com.dm.earth.heatwaves.impl.BiomeTemperatureFactor;
 import com.dm.earth.heatwaves.impl.BlockTemperatureFactor;
 import com.mojang.brigadier.Command;
@@ -46,6 +47,7 @@ public class Heatwaves implements ModInitializer, CommandRegistrationCallback {
 					BlockState state = world.getBlockState(pos);
 					return state.contains(Properties.WATERLOGGED) && state.get(Properties.WATERLOGGED);
 				}));
+		BlockTemperatureKeeper.register(new BasicBlockTemperatureKeeper());
 	}
 
 	@Override
