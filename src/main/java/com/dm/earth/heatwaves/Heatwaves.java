@@ -18,11 +18,13 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.command.CommandBuildContext;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.CommandManager.RegistrationEnvironment;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -37,7 +39,13 @@ public class Heatwaves implements ModInitializer, CommandRegistrationCallback {
 		TemperatureFactor.register(new BlockTemperatureFactor());
 		TemperatureFactor.register(new BiomeTemperatureFactor());
 		BlockTemperatureSource.register(BlockTemperatureSource.simple(FluidConstants.LAVA_TEMPERATURE, Blocks.LAVA));
-		BlockTemperatureKeeper.register(BlockTemperatureKeeper.simple(80, Blocks.WATER));
+		BlockTemperatureKeeper.register(BlockTemperatureKeeper.simple(FluidConstants.WATER_TEMPERATURE, Blocks.WATER));
+		BlockTemperatureKeeper.register(new BlockTemperatureKeeper.Container.Custom(
+				(BlockTemperatureKeeper.SimpleKeeper) (world, pos) -> FluidConstants.WATER_TEMPERATURE,
+				(world, pos) -> {
+					BlockState state = world.getBlockState(pos);
+					return state.contains(Properties.WATERLOGGED) && state.get(Properties.WATERLOGGED);
+				}));
 	}
 
 	@Override
@@ -45,12 +53,14 @@ public class Heatwaves implements ModInitializer, CommandRegistrationCallback {
 			RegistrationEnvironment environment) {
 		dispatcher.register(
 				CommandManager.literal("heatwaves").then(CommandManager.literal("getTemperature").executes(ctx -> {
-					ctx.getSource().sendFeedback(Text.of(String.valueOf(BlockTemperature
+					ctx.getSource().sendFeedback(Text.of("Current block temperature: " + (BlockTemperature
 							.getTemperature(ctx.getSource().getWorld(), ctx.getSource().getPlayer().getBlockPos(), true)
-							- FluidConstants.WATER_TEMPERATURE)), false);
+							- FluidConstants.WATER_TEMPERATURE) + "ºC"), false);
 					return Command.SINGLE_SUCCESS;
 				})).then(CommandManager.literal("debug").requires(src -> src.hasPermissionLevel(4)).executes(ctx -> {
 					debug = !debug;
+					ctx.getSource().sendFeedback(
+							Text.of("Debug mode turned " + (debug ? "on" : "off") + " for Heatwaves!"), true);
 					return Command.SINGLE_SUCCESS;
 				})));
 	}

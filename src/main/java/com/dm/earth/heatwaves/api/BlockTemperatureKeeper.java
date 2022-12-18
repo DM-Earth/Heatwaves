@@ -7,8 +7,6 @@ import com.dm.earth.heatwaves.Heatwaves;
 
 import net.minecraft.block.Block;
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldAccess;
 
@@ -53,6 +51,32 @@ public interface BlockTemperatureKeeper {
 			}
 		}
 
+		class Custom implements Container {
+			protected final BlockTemperatureKeeper keeper;
+			protected final ValidPredicate predicate;
+
+			public Custom(BlockTemperatureKeeper keeper, ValidPredicate predicate) {
+				this.keeper = keeper;
+				this.predicate = predicate;
+			}
+
+			@Override
+			public BlockTemperatureKeeper getKeeper() {
+				return this.keeper;
+			}
+
+			@Override
+			public boolean isValid(WorldAccess world, BlockPos pos) {
+				return this.predicate.test(world, pos);
+			}
+
+			@FunctionalInterface
+			public static interface ValidPredicate {
+				boolean test(WorldAccess world, BlockPos pos);
+			}
+
+		}
+
 		/**
 		 * @return The keeper of the blocks.
 		 */
@@ -66,6 +90,21 @@ public interface BlockTemperatureKeeper {
 		 * @return Whether the block is valid.
 		 */
 		boolean isValid(WorldAccess world, BlockPos pos);
+	}
+
+	/**
+	 * A simple variant of {@code BlockTemperatureKeeper}.
+	 */
+	@FunctionalInterface
+	interface SimpleKeeper extends BlockTemperatureKeeper {
+
+		@Override
+		default int keep(WorldAccess world, BlockPos pos, int temperature) {
+			return Math.min(Math.abs(temperature), getKept(world, pos));
+		}
+
+		int getKept(WorldAccess world, BlockPos pos);
+
 	}
 
 	static final ArrayList<Container> KEEPERS = new ArrayList<>();
@@ -82,8 +121,15 @@ public interface BlockTemperatureKeeper {
 		return keeper;
 	}
 
+	/**
+	 * Creates a new {@code Simple} instance.
+	 *
+	 * @param kept   The kept temperature.
+	 * @param blocks The blocks.
+	 * @return The created instance.
+	 */
 	static Container.Simple simple(int kept, Block... blocks) {
-		return Container.Simple.of((world, pos, temp) -> Math.min(Math.abs(temp), kept), blocks);
+		return Container.Simple.of((SimpleKeeper) (world, pos) -> kept, blocks);
 	}
 
 	/**
