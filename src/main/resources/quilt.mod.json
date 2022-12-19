@@ -9,7 +9,7 @@
 		"version": "${version}",
 		"metadata": {
 			"name": "Heatwaves",
-			"description": "A short description of your mod.",
+			"description": "A temperature API for Minecraft",
 			"contributors": {
 				"DM Earth": "Owner"
 			},
