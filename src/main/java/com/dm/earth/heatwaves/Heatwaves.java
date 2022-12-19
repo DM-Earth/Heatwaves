@@ -20,6 +20,7 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.command.CommandBuildContext;
@@ -41,7 +42,7 @@ public class Heatwaves implements ModInitializer, CommandRegistrationCallback {
 		TemperatureFactor.register(new BlockTemperatureFactor());
 		TemperatureFactor.register(new BiomeTemperatureFactor());
 		TemperatureFactor.register(new OverworldTimeTemperatureFactor());
-		BlockTemperatureSource.register(BlockTemperatureSource.simple(FluidConstants.LAVA_TEMPERATURE, Blocks.LAVA));
+
 		BlockTemperatureKeeper.register(BlockTemperatureKeeper.simple(FluidConstants.WATER_TEMPERATURE, Blocks.WATER));
 		BlockTemperatureKeeper.register(new BlockTemperatureKeeper.Container.Custom(
 				(BlockTemperatureKeeper.SimpleKeeper) (world, pos) -> FluidConstants.WATER_TEMPERATURE,
@@ -50,6 +51,16 @@ public class Heatwaves implements ModInitializer, CommandRegistrationCallback {
 					return state.contains(Properties.WATERLOGGED) && state.get(Properties.WATERLOGGED);
 				}));
 		BlockTemperatureKeeper.register(new BasicBlockTemperatureKeeper());
+
+		BlockTemperatureSource.register(BlockTemperatureSource.simple(TemperatureConstants.LAVA_TEMPERATURE,
+				Blocks.LAVA, Blocks.LAVA_CAULDRON));
+		BlockTemperatureSource.register(BlockTemperatureSource.simple(TemperatureConstants.FIRE_TEMPERATURE,
+				Blocks.FIRE, Blocks.CAMPFIRE, Blocks.MAGMA_BLOCK));
+		BlockTemperatureSource.register(BlockTemperatureSource.simple(TemperatureConstants.SOUL_FIRE_TEMPERATURE,
+				Blocks.SOUL_FIRE, Blocks.SOUL_CAMPFIRE));
+		BlockTemperatureSource.register(BlockTemperatureSource.custom((world, pos) -> 365,
+				(world, pos) -> world.getBlockState(pos).getBlock() instanceof AbstractFurnaceBlock
+						&& world.getBlockState(pos).get(AbstractFurnaceBlock.LIT)));
 	}
 
 	@Override
@@ -59,7 +70,7 @@ public class Heatwaves implements ModInitializer, CommandRegistrationCallback {
 				CommandManager.literal("heatwaves").then(CommandManager.literal("getTemperature").executes(ctx -> {
 					ctx.getSource().sendFeedback(Text.of("Current block temperature: " + (BlockTemperature
 							.getTemperature(ctx.getSource().getWorld(), ctx.getSource().getPlayer().getBlockPos(), true)
-							- FluidConstants.WATER_TEMPERATURE) + "ºC"), false);
+							- FluidConstants.WATER_TEMPERATURE)), false);
 					return Command.SINGLE_SUCCESS;
 				})).then(CommandManager.literal("debug").requires(src -> src.hasPermissionLevel(4)).executes(ctx -> {
 					debug = !debug;

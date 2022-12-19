@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.dm.earth.heatwaves.api.BlockTemperatureSource.Container.Custom.BlockPredicate;
+
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldAccess;
@@ -50,6 +52,34 @@ public interface BlockTemperatureSource {
 			public boolean isValid(WorldAccess world, BlockPos pos) {
 				return blocks.contains(world.getBlockState(pos).getBlock());
 			}
+		}
+
+		public static class Custom implements Container {
+
+			@FunctionalInterface
+			public static interface BlockPredicate {
+				boolean test(WorldAccess world, BlockPos pos);
+			}
+
+			protected final BlockTemperatureSource temperature;
+
+			protected final BlockPredicate predicate;
+
+			public Custom(BlockTemperatureSource source, BlockPredicate predicate) {
+				this.temperature = source;
+				this.predicate = predicate;
+			}
+
+			@Override
+			public BlockTemperatureSource getTemperature() {
+				return this.temperature;
+			}
+
+			@Override
+			public boolean isValid(WorldAccess world, BlockPos pos) {
+				return predicate.test(world, pos);
+			}
+
 		}
 
 		/**
@@ -107,6 +137,10 @@ public interface BlockTemperatureSource {
 	 */
 	static Container.Simple simple(int temperature, Block... blocks) {
 		return Container.Simple.of((world, pos) -> temperature, blocks);
+	}
+
+	static Container.Custom custom(BlockTemperatureSource source, BlockPredicate predicate) {
+		return new Container.Custom(source, predicate);
 	}
 
 	/**
