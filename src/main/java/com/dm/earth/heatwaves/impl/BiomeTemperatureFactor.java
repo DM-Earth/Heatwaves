@@ -18,7 +18,7 @@ public class BiomeTemperatureFactor implements TemperatureFactor {
 	}
 
 	private static float processTemp(float temp) {
-		return ((temp * 25F) - 2.5F) * .725f;
+		return ((temp * 20F) - 2.0F) * .95f;
 	}
 
 }
