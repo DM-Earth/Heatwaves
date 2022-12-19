@@ -53,7 +53,9 @@ public class BlockTemperatureFactor implements TemperatureFactor {
 					break;
 				}
 			}
-			ret += finalTemp;
+
+			if (finalTemp > ret)
+				ret = finalTemp;
 		}
 
 		return new Info(ret, false, true);
