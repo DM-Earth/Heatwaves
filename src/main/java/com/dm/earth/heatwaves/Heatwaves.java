@@ -23,6 +23,7 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.CandleBlock;
 import net.minecraft.command.CommandBuildContext;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.CommandManager.RegistrationEnvironment;
@@ -61,6 +62,21 @@ public class Heatwaves implements ModInitializer, CommandRegistrationCallback {
 		BlockTemperatureSource.register(BlockTemperatureSource.custom((world, pos) -> 365,
 				(world, pos) -> world.getBlockState(pos).getBlock() instanceof AbstractFurnaceBlock
 						&& world.getBlockState(pos).get(AbstractFurnaceBlock.LIT)));
+		BlockTemperatureSource
+				.register(BlockTemperatureSource.simple(TemperatureConstants.ICE_WATER_TEMPERATURE, Blocks.ICE));
+		BlockTemperatureSource.register(
+				BlockTemperatureSource.simple(TemperatureConstants.ICE_WATER_TEMPERATURE - 10, Blocks.PACKED_ICE));
+		BlockTemperatureSource.register(
+				BlockTemperatureSource.simple(TemperatureConstants.ICE_WATER_TEMPERATURE - 20, Blocks.BLUE_ICE));
+		BlockTemperatureSource
+				.register(BlockTemperatureSource.simple(TemperatureConstants.FIRE_TEMPERATURE - 35, Blocks.TORCH));
+		BlockTemperatureSource
+				.register(BlockTemperatureSource.simple(TemperatureConstants.FIRE_TEMPERATURE - 50, Blocks.SOUL_TORCH));
+		BlockTemperatureSource.register(BlockTemperatureSource.custom(
+				(world, pos) -> world.getBlockState(pos).get(CandleBlock.CANDLES)
+						* 5 + TemperatureConstants.FIRE_TEMPERATURE - 55,
+				(world, pos) -> world.getBlockState(pos).getBlock() instanceof CandleBlock
+						&& world.getBlockState(pos).get(CandleBlock.LIT)));
 	}
 
 	@Override
