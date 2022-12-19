@@ -22,7 +22,7 @@ public class BlockTemperatureFactor implements TemperatureFactor {
 		Optional<Integer> targetTemp = BlockTemperatureSource.getSource(world, pos);
 		if (targetTemp.isPresent())
 			return new Info(targetTemp.get(), true, true);
-		int range = MAX_DISTANCE;
+		int range = (int) (MAX_DISTANCE * 1.5 - 1);
 		ArrayList<BlockPos> sources = new ArrayList<>();
 		int ret = 0;
 		while (true) {

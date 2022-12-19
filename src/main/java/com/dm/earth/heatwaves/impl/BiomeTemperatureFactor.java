@@ -12,10 +12,10 @@ public class BiomeTemperatureFactor implements TemperatureFactor {
 	@Override
 	@SuppressWarnings({ "deprecation", "UnstableApiUsage" })
 	public Info increase(World world, BlockPos pos, int environment) {
-		float weather = world.isRaining() ? 0 : (world.getBiome(pos).value().doesNotSnow(pos) ? 3.5f : 8.5f);
+		float weather = world.isRaining() ? (world.getBiome(pos).value().doesNotSnow(pos) ? 3.5f : 8.5f) : 0;
 		return new Info(
 				(int) (processTemp(world.getBiome(pos).value().getTemperature(pos)) + FluidConstants.WATER_TEMPERATURE
-						+ weather),
+						- weather),
 				false, false);
 	}
 
