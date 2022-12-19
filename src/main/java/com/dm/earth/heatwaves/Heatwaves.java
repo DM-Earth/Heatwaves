@@ -83,17 +83,21 @@ public class Heatwaves implements ModInitializer, CommandRegistrationCallback {
 	public void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher, CommandBuildContext buildContext,
 			RegistrationEnvironment environment) {
 		dispatcher.register(
-				CommandManager.literal("heatwaves").then(CommandManager.literal("getTemperature").executes(ctx -> {
-					ctx.getSource().sendFeedback(Text.of("Current block temperature: " + (BlockTemperature
-							.getTemperature(ctx.getSource().getWorld(), ctx.getSource().getPlayer().getBlockPos(), true)
-							- FluidConstants.WATER_TEMPERATURE)), false);
-					return Command.SINGLE_SUCCESS;
-				})).then(CommandManager.literal("debug").requires(src -> src.hasPermissionLevel(4)).executes(ctx -> {
-					debug = !debug;
-					ctx.getSource().sendFeedback(
-							Text.of("Debug mode turned " + (debug ? "on" : "off") + " for Heatwaves!"), true);
-					return Command.SINGLE_SUCCESS;
-				})));
+				CommandManager.literal("heatwaves").then(CommandManager.literal("getTemperature")
+						.requires(src -> src.hasPermissionLevel(3)).executes(ctx -> {
+							ctx.getSource().sendFeedback(Text.of("Current block temperature: " + (BlockTemperature
+									.getTemperature(ctx.getSource().getWorld(),
+											ctx.getSource().getPlayer().getBlockPos(), true)
+									- FluidConstants.WATER_TEMPERATURE)), false);
+							return Command.SINGLE_SUCCESS;
+						})).then(CommandManager.literal("debug").requires(src -> src.hasPermissionLevel(4))
+								.executes(ctx -> {
+									debug = !debug;
+									ctx.getSource().sendFeedback(
+											Text.of("Debug mode turned " + (debug ? "on" : "off") + " for Heatwaves!"),
+											true);
+									return Command.SINGLE_SUCCESS;
+								})));
 	}
 
 	public static boolean debug(Supplier<String> message) {
