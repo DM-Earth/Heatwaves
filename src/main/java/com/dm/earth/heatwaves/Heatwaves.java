@@ -15,6 +15,7 @@ import com.dm.earth.heatwaves.api.TemperatureFactor;
 import com.dm.earth.heatwaves.impl.BasicBlockTemperatureKeeper;
 import com.dm.earth.heatwaves.impl.BiomeTemperatureFactor;
 import com.dm.earth.heatwaves.impl.BlockTemperatureFactor;
+import com.dm.earth.heatwaves.impl.OverworldTimeTemperatureFactor;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 
@@ -39,6 +40,7 @@ public class Heatwaves implements ModInitializer, CommandRegistrationCallback {
 	public void onInitialize(ModContainer mod) {
 		TemperatureFactor.register(new BlockTemperatureFactor());
 		TemperatureFactor.register(new BiomeTemperatureFactor());
+		TemperatureFactor.register(new OverworldTimeTemperatureFactor());
 		BlockTemperatureSource.register(BlockTemperatureSource.simple(FluidConstants.LAVA_TEMPERATURE, Blocks.LAVA));
 		BlockTemperatureKeeper.register(BlockTemperatureKeeper.simple(FluidConstants.WATER_TEMPERATURE, Blocks.WATER));
 		BlockTemperatureKeeper.register(new BlockTemperatureKeeper.Container.Custom(
