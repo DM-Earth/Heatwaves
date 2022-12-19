@@ -22,7 +22,7 @@ public class BlockTemperatureFactor implements TemperatureFactor {
 		Optional<Integer> targetTemp = BlockTemperatureSource.getSource(world, pos);
 		if (targetTemp.isPresent())
 			return new Info(targetTemp.get(), true, true);
-		int range = (int) (MAX_DISTANCE * 1.5 - 1);
+		int range = (int) (MAX_DISTANCE * 1.35 - 1);
 		ArrayList<BlockPos> sources = new ArrayList<>();
 		int ret = 0;
 		while (true) {
@@ -44,7 +44,7 @@ public class BlockTemperatureFactor implements TemperatureFactor {
 			}
 
 			int finalTemp = BlockTemperatureSource.getSource(world, tp).get() - env;
-			int decrep = (int) Math.pow(finalTemp, 4.5d / MAX_DISTANCE);
+			int decrep = (int) Math.pow(finalTemp, 2.5d / MAX_DISTANCE);
 			for (BlockPos passing : passed) {
 				finalTemp -= decrep;
 				finalTemp = BlockTemperatureKeeper.process(world, passing, finalTemp);
