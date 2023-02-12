@@ -6,8 +6,8 @@ import java.util.List;
 import com.dm.earth.heatwaves.Heatwaves;
 
 import net.minecraft.block.Block;
-import net.minecraft.registry.Registries;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.WorldAccess;
 
 @FunctionalInterface
@@ -148,10 +148,10 @@ public interface BlockTemperatureKeeper {
 			if (container.isValid(world, pos)) {
 				keepers.add(container.getKeeper().keep(world, pos, addition));
 				Heatwaves.debug(() -> "Detected keeper at " + pos.toString() + ": "
-						+ Registries.BLOCK.getId(world.getBlockState(pos).getBlock()).toString());
+						+ Registry.BLOCK.getId(world.getBlockState(pos).getBlock()).toString());
 			} else
 				Heatwaves.debug(() -> "Not a keeper at " + pos.toString() + ": "
-						+ Registries.BLOCK.getId(world.getBlockState(pos).getBlock()).toString());
+						+ Registry.BLOCK.getId(world.getBlockState(pos).getBlock()).toString());
 		}
 		int ret = addition + ((addition > 0 ? -1 : 1)
 				* (keepers.isEmpty() ? 0 : keepers.stream().mapToInt(Integer::intValue).sum() / keepers.size()));
